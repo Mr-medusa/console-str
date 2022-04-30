@@ -41,10 +41,10 @@ System.out.println(text.toEscapeString());      // 获取ANSI escape code子串
 
 - Eclipse console
 
-  ![](readme/eclipse console.png)
+  ![](https://github.com/Mr-medusa/console-str/blob/master/readme/eclipse%20console.png)
 
 - IDEA console
 
-  ![](readme/IDEA console.png)
+  ![](https://github.com/Mr-medusa/console-str/blob/master/readme/IDEA%20console.png)
 
 
