@@ -1,6 +1,5 @@
 package red.medusa.str;
 
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -186,7 +185,7 @@ public class ConsoleStr {
         this.rgbCodes.add(rgb);
         return this.returnStr(null);
     }
-    
+
     // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
     // +                            style                                         -+-
     // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
@@ -297,44 +296,23 @@ public class ConsoleStr {
     // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
     // +                            wrap                                          -+-
     // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-    private static Method fontStyleMethod;
-    private static Method fontColorMethod;
-    private static Method cursorMethod;
-
-    static {
-        try {
-            fontStyleMethod = FontStyle.class.getMethod("code");
-            fontColorMethod = FontColor.class.getMethod("code");
-            cursorMethod = Cursor.class.getMethod("code");
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 对子串进行着色处理，并为 styledText 设置着色后的字符串值
      */
-    @SuppressWarnings("all")
     private ConsoleStr wrap() {
         String codeStr = codes.stream().map(it -> {
             try {
-                Method code = it instanceof FontStyle ? fontStyleMethod :
-                        (it instanceof FontColor ? fontColorMethod :
-                                (it instanceof Cursor ? cursorMethod : null)
-                        );
-                // 若 code = null,假设 it 为一个 ANSI escape code
-                return code != null ? (String) code.invoke(it) : (String) it;
+                return it.toString();
             } catch (Exception e) {
                 return (String) it;
             }
         }).collect(Collectors.joining(";"));
         // 将 rbg 值放到控制码的最后位置
         String rgbCodeStr = rgbCodes.stream().flatMap(it->it.rgbCodes().stream()).map(it->{
-            Method code = it instanceof FontColor ? fontColorMethod : null;
             try {
-                return code != null ? (String) code.invoke(it) : String.valueOf(it);
+                return it.toString();
             } catch (Exception e) {
-              return (String)it;
+                return (String)it;
             }
         }).collect(Collectors.joining(";"));
         codeStr = codeStr.length() > 0 ?
@@ -401,7 +379,8 @@ public class ConsoleStr {
             this.code = code;
         }
 
-        public String code() {
+        @Override
+        public String toString() {
             return code;
         }
     }
@@ -424,7 +403,8 @@ public class ConsoleStr {
             this.code = code;
         }
 
-        public String code() {
+        @Override
+        public String toString() {
             return code;
         }
     }
@@ -437,7 +417,8 @@ public class ConsoleStr {
             this.code = code;
         }
 
-        public String code() {
+        @Override
+        public String toString() {
             return code;
         }
     }
@@ -480,7 +461,7 @@ public class ConsoleStr {
             throw new RuntimeException("B【" + B + "】值范围为【0-255】");
         }
     }
-    
+
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
